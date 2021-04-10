@@ -47,9 +47,30 @@ namespace Quotes.Services
             return new AuthenticateResponse(user, jwtToken, refreshToken.Token);
         }
 
-        public Task<AuthenticateResponse> RefreshToken(string refreshToken)
+        public async Task<AuthenticateResponse> RefreshToken(string refreshToken)
         {
-            throw new NotImplementedException();
+            var user = db.ApplicationUser.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == refreshToken));
+
+            // return null if no user found with token
+            if (user == null) return null;
+
+            var userRefreshToken = user.RefreshTokens.Single(x => x.Token == refreshToken);
+
+            // return null if token is no longer active
+            if (!userRefreshToken.IsActive) return null;
+
+            // replace old refresh token with a new one and save
+            var newRefreshToken = tokenService.GenerateRefreshToken();
+            userRefreshToken.Revoked = DateTime.UtcNow;
+            userRefreshToken.ReplacedByToken = newRefreshToken.Token;
+            user.RefreshTokens.Add(newRefreshToken);
+            db.Update(user);
+            db.SaveChanges();
+
+            // generate new jwt
+            var jwtToken = await tokenService.GenerateJwtToken(user);
+
+            return new AuthenticateResponse(user, jwtToken, newRefreshToken.Token);
         }
 
         public async Task<AuthenticateResponse> Registration(RegistrationRequest model)
