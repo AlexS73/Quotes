@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Quotes.Core.HelpModel;
 using Quotes.Core.Models;
 using Quotes.Data;
@@ -53,10 +54,6 @@ namespace Quotes.Services
 
         public async Task<AuthenticateResponse> Registration(RegistrationRequest model)
         {
-            //ApplicationUser user = db.ApplicationUser.FirstOrDefault(_ => _.UserName == model.Email);
-
-            //if (user != null) return null;
-
             ApplicationUser newUser = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             var res = await userManager.CreateAsync(newUser, model.Password);
@@ -66,16 +63,20 @@ namespace Quotes.Services
                 return null;
             }
 
-            // генерация refresh при успешной аутентификации
-            string jwtToken = await tokenService.GenerateJwtToken(newUser);
+            ApplicationUser createdUser = db.ApplicationUser
+                .Include(_=>_.RefreshTokens)
+                .FirstOrDefault(_ => _.UserName == newUser.UserName);
+
+            // генерация refresh при успешной регистрации
+            string jwtToken = await tokenService.GenerateJwtToken(createdUser);
             RefreshToken refreshToken = tokenService.GenerateRefreshToken();
 
-            newUser.RefreshTokens.Add(refreshToken);
-            db.Update(newUser);
+            createdUser.RefreshTokens.Add(refreshToken);
+            db.Update(createdUser);
             await db.SaveChangesAsync();
 
 
-            return new AuthenticateResponse(newUser, jwtToken, refreshToken.Token);
+            return new AuthenticateResponse(createdUser, jwtToken, refreshToken.Token);
         }
 
         public bool RevokeToken(string token)
