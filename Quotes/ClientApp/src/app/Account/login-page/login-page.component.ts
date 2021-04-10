@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {AuthService} from "../../Services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-page',
@@ -7,9 +10,37 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor() { }
+  loginForm : FormGroup
+  loading = false;
+
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.loginForm = new FormGroup({
+      UserName : new FormControl('', [
+        Validators.email,
+        Validators.required
+      ]),
+      Password : new FormControl('', [
+        Validators.required,
+        Validators.minLength(8)
+      ])
+    });
   }
 
+  Submit(e) {
+    e.preventDefault();
+    const { UserName, Password } = this.loginForm.value;
+    this.loading = true;
+
+    const result = this.authService.LogIn(UserName, Password);
+
+    result.subscribe((data) => {
+      this.loading = false;
+      this.router.navigate(['/']);
+    }, (data) => {
+      this.loading = false;
+      // notify(data.error.message, 'error', 2000);
+    });
+  }
 }

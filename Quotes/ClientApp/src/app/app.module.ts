@@ -10,6 +10,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthService} from "./Services/auth.service";
 import {DataService} from "./Services/data.service";
 import {JwtInterceptor} from "./Services/jwt.interceptor";
+import {ReactiveFormsModule} from "@angular/forms";
 
 
 const INTERCEPTOR_PROVIDER: Provider = {
@@ -28,7 +29,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [AuthService, DataService, INTERCEPTOR_PROVIDER],
   bootstrap: [AppComponent]

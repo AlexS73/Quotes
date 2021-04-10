@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-reg-page',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegPageComponent implements OnInit {
 
+  loginForm : FormGroup
+
   constructor() { }
 
   ngOnInit(): void {
+    this.loginForm = new FormGroup({
+      "UserName" : new FormControl(),
+      "Password" : new FormControl(),
+      "ConfirmPassword" : new FormControl()
+    });
+  }
+
+  Submit() {
+    console.log(this.loginForm);
   }
 
 }

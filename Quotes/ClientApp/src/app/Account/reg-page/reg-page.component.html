@@ -1,1 +1,22 @@
-<p>reg-page works!</p>
+<div class="container" >
+  <form class="regForm" action="#" [formGroup]="loginForm" (ngSubmit)="Submit()">
+
+    <div class="form-group" >
+      <label for="unInput">Имя пользователя</label>
+      <input id="unInput" type="text" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+      <label for="pasInput">Пароль</label>
+      <input id="pasInput" type="password" class="form-control"/>
+    </div>
+
+    <div class="form-group">
+      <label for="pasConfirmInput">Подтверждение пароля</label>
+      <input id="pasConfirmInput" type="password" class="form-control"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Создать аккаунт</button>
+    <a routerLink="/login">На страницу входа</a>
+  </form>
+</div>

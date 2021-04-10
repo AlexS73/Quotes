@@ -12,10 +12,12 @@ export class AuthService {
   private _lastAuthenticatedPath: string = defaultPath;
   private refreshTokenTimeout;
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.setToken = this.setToken.bind(this);
+  }
 
   LogIn(UserName: string, Password: string){
-    return this.http.post('/api/Account/login', {UserName, Password})
+    return this.http.post('/api/Account/authenticate', {UserName, Password})
       .pipe(
         tap(this.setToken)
       )
@@ -55,12 +57,12 @@ export class AuthService {
 
   private setToken(response){
     if (response){
-      const jwtToken = JSON.parse(atob(response.JwtToken.split('.')[1]));
+      const jwtToken = JSON.parse(atob(response.jwtToken.split('.')[1]));
       const expDate = new Date(jwtToken.exp * 1000);
-      localStorage.setItem('token', response.JwtToken);
+      localStorage.setItem('token', response.jwtToken);
       localStorage.setItem('token-exp', expDate.toString());
       this.startRefreshTokenTimer();
-      this.user = { email: response.UserName };
+      this.user = { email: response.userName };
     }
     else {
       this.user = null;
