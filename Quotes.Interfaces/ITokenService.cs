@@ -12,7 +12,5 @@ namespace Quotes.Interfaces
     {
         Task<string> GenerateJwtToken(ApplicationUser user);
         RefreshToken GenerateRefreshToken();
-        bool RevokeToken(string token);
-        AuthenticateResponse RefreshToken(string token);
     }
 }

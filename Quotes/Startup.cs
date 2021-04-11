@@ -42,6 +42,8 @@ namespace Quotes
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDataService, DataService>();
 
+
+            //Token settings
             var tokenSettingsSection = Configuration.GetSection("TokenSettings");
             services.Configure<TokenModel>(tokenSettingsSection);
 
@@ -75,6 +77,7 @@ namespace Quotes
                                 ClockSkew = TimeSpan.Zero
                 };
             });
+            //End Token settings
 
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>

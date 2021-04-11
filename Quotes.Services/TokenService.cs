@@ -24,16 +24,6 @@ namespace Quotes.Services
             this.tokenModel = tokenModel.Value;
         }
 
-        public AuthenticateResponse RefreshToken(string token)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool RevokeToken(string tiken)
-        {
-            throw new NotImplementedException();
-        }
-
         public RefreshToken GenerateRefreshToken()
         {
             using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
