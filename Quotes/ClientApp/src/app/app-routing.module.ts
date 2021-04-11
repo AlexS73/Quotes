@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {HomePageComponent} from "./Home/home-page/home-page.component";
 import {RegPageComponent} from "./Account/reg-page/reg-page.component";
 import {LoginPageComponent} from "./Account/login-page/login-page.component";
-import {AuthGuardService} from "./Services/auth.guard.service";
+import {AuthGuardService} from "./Shared/Services/auth.guard.service";
 
 const routes: Routes = [
   {path: '', component: HomePageComponent, canActivate: [ AuthGuardService ]},

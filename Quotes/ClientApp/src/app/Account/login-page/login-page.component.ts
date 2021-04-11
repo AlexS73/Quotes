@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../Services/auth.service";
+import {AuthService} from "../../Shared/Services/auth.service";
 import {Router} from "@angular/router";
 
 @Component({
@@ -13,11 +13,12 @@ export class LoginPageComponent implements OnInit {
   loginForm : FormGroup
   loading = false;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      UserName : new FormControl('', [
+      Email : new FormControl('', [
         Validators.email,
         Validators.required
       ]),
@@ -30,10 +31,10 @@ export class LoginPageComponent implements OnInit {
 
   Submit(e) {
     e.preventDefault();
-    const { UserName, Password } = this.loginForm.value;
+    const { Email, Password } = this.loginForm.value;
     this.loading = true;
 
-    const result = this.authService.LogIn(UserName, Password);
+    const result = this.authService.LogIn(Email, Password);
 
     result.subscribe((data) => {
       this.loading = false;

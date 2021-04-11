@@ -1,17 +1,58 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
   <h5 class="my-0 mr-md-auto font-weight-normal">Котировки</h5>
-  <nav class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="#">Главная</a>
-    <a class="p-2 text-dark" href="#">Токен</a>
-  </nav>
+<!--  <nav class="my-2 my-md-0 mr-md-3">-->
+<!--    <a class="p-2 text-dark" href="#">Главная</a>-->
+<!--    <a class="p-2 text-dark" href="#">Токен</a>-->
+<!--  </nav>-->
+
   <div ngbDropdown class="d-inline-block">
-    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>email@mail.ru</button>
+    <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle>{{user.email}}</button>
     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-      <button ngbDropdownItem>Выход</button>
+      <button ngbDropdownItem class="btn-outline-primary" (click)="LogOut()">Выход</button>
     </div>
   </div>
 </div>
 <div class="container">
-  <input type="text" ngbDatepicker #d="ngbDatepicker"/>
-  <button (click)="d.toggle()">Выбрать дату</button>
+
+  <div class="token_block">
+    <label for="token">JSON Web Token:</label>
+    <pre id="token">{{this.token}}</pre>
+    <input type="button" value="Обновить токен" (click)="refreshToken()">
+  </div>
+
+  <hr>
+
+  <div class="form-group">
+    <input type="text" ngbDatepicker #d="ngbDatepicker" (dateSelect)="onDateSelect($event)"/>
+    <button class="btn btn-primary ml-5" (click)="d.toggle()">Выбрать дату</button>
+  </div>
+
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Id</th>
+      <th scope="col">Код</th>
+      <th scope="col">Символьный код</th>
+      <th scope="col">Номинал</th>
+      <th scope="col">Валюта</th>
+      <th scope="col">Курс</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let salute of ValCurs.valutes; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        {{ salute.id }}
+      </td>
+      <td>{{ salute.numCode }}</td>
+      <td>{{ salute.charCode }}</td>
+      <td>{{ salute.nominal }}</td>
+      <td>{{ salute.name }}</td>
+      <td>{{ salute.value }}</td>
+    </tr>
+    </tbody>
+  </table>
+
 </div>

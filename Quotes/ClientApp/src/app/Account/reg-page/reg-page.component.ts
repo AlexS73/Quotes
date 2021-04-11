@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Router} from "@angular/router";
+import {AuthService} from "../../Shared/Services/auth.service";
 
 @Component({
   selector: 'app-reg-page',
@@ -8,20 +10,40 @@ import {FormControl, FormGroup} from "@angular/forms";
 })
 export class RegPageComponent implements OnInit {
 
-  loginForm : FormGroup
+  regForm : FormGroup
+  private loading: boolean;
 
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
-      "UserName" : new FormControl(),
-      "Password" : new FormControl(),
-      "ConfirmPassword" : new FormControl()
+    this.regForm = new FormGroup({
+      "Email" : new FormControl('',[
+        Validators.email,
+        Validators.required
+      ]),
+      "Password" : new FormControl('', [
+        Validators.required,
+        Validators.minLength(8)
+      ]),
+      "ConfirmPassword" : new FormControl('', [
+      ])
     });
   }
 
-  Submit() {
-    console.log(this.loginForm);
+  Submit(e) {
+    e.preventDefault();
+    const { Email, Password, ConfirmPassword } = this.regForm.value;
+    this.loading = true;
+
+    const result = this.authService.Registration(Email, Password, ConfirmPassword);
+
+    result.subscribe((data) => {
+      this.loading = false;
+      this.router.navigate(['/']);
+    }, (data) => {
+      this.loading = false;
+      // notify(data.error.message, 'error', 2000);
+    });
   }
 
 }

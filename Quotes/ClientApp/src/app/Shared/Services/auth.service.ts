@@ -16,8 +16,15 @@ export class AuthService {
     this.setToken = this.setToken.bind(this);
   }
 
-  LogIn(UserName: string, Password: string){
-    return this.http.post('/api/Account/authenticate', {UserName, Password})
+  LogIn(Email: string, Password: string){
+    return this.http.post('/api/Account/authenticate', {'UserName': Email, Password})
+      .pipe(
+        tap(this.setToken)
+      )
+  }
+
+  Registration(Email: string, Password: string, ConfirmPassword: string){
+    return this.http.post('/api/Account/registration', {Email, Password, ConfirmPassword})
       .pipe(
         tap(this.setToken)
       )
@@ -68,6 +75,10 @@ export class AuthService {
       this.user = null;
       localStorage.clear();
     }
+  }
+
+  public get GetUser(){
+    return this.user;
   }
 
   private startRefreshTokenTimer(){

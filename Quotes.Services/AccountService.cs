@@ -35,7 +35,6 @@ namespace Quotes.Services
 
             if (!passCorrect) return null;
 
-            // генерация refresh при успешной аутентификации
             string jwtToken = await tokenService.GenerateJwtToken(user);
             RefreshToken refreshToken = tokenService.GenerateRefreshToken();
 
@@ -102,7 +101,22 @@ namespace Quotes.Services
 
         public bool RevokeToken(string token)
         {
-            throw new NotImplementedException();
+            var user = db.ApplicationUser.SingleOrDefault(u => u.RefreshTokens.Any(t => t.Token == token));
+
+            // return false if no user found with token
+            if (user == null) return false;
+
+            var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+            // return false if token is not active
+            if (!refreshToken.IsActive) return false;
+
+            // revoke token and save
+            refreshToken.Revoked = DateTime.UtcNow;
+            db.Update(user);
+            db.SaveChanges();
+
+            return true;
         }
     }
 }

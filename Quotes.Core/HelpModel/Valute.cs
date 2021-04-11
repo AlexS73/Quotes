@@ -7,7 +7,6 @@ using System.Xml.Serialization;
 
 namespace Quotes.Core.HelpModel
 {
-    // [XmlRoot(ElementName = "Valute")]
     [Serializable]
     public class Valute
     {
