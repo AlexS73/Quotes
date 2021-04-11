@@ -40,6 +40,7 @@ namespace Quotes
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDataService, DataService>();
 
             var tokenSettingsSection = Configuration.GetSection("TokenSettings");
             services.Configure<TokenModel>(tokenSettingsSection);

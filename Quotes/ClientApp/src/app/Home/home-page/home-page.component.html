@@ -1,4 +1,17 @@
-<div class="container py-3">
-<p>home page</p>
-
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+  <h5 class="my-0 mr-md-auto font-weight-normal">Котировки</h5>
+  <nav class="my-2 my-md-0 mr-md-3">
+    <a class="p-2 text-dark" href="#">Главная</a>
+    <a class="p-2 text-dark" href="#">Токен</a>
+  </nav>
+  <div ngbDropdown class="d-inline-block">
+    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>email@mail.ru</button>
+    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+      <button ngbDropdownItem>Выход</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <input type="text" ngbDatepicker #d="ngbDatepicker"/>
+  <button (click)="d.toggle()">Выбрать дату</button>
 </div>
